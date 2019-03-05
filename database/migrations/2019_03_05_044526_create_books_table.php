@@ -20,7 +20,7 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->comment('書籍名');
+            $table->string('title')->comment('書籍名');
             $table->text('url')->comment('URL(Amazon等)');
             $table->text('img')->comment('画像');
             $table->text('description')->comment('説明');
@@ -28,6 +28,7 @@ class CreateBooksTable extends Migration
             $table->string('author')->comment('著者');
             $table->string('publisher')->comment('出版社');
             $table->date('published_at')->comment('出版日');
+            $table->boolean('is_rental')->default(false)->comment('レンタルされているか');
             $table->timestamps();
         });
     }

@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Book::class, function (Faker $faker) {
     return [
-        'name'          => $faker->word,
+        'title'          => $faker->word,
         'url'           => $faker->url,
         'img'           => $faker->url,
         'description'   => $faker->text,
@@ -13,5 +13,6 @@ $factory->define(Book::class, function (Faker $faker) {
         'author'        => $faker->name,
         'publisher'     => $faker->company,
         'published_at'  => $faker->dateTimeThisDecade,
+        'is_rental'     => $faker->boolean,
     ];
 });
