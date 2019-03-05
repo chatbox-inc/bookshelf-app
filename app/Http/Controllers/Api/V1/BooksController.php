@@ -83,7 +83,7 @@ class BooksController extends Controller
     }
 
     /**
-     * 書籍貸出/返却
+     * 書籍貸出
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
@@ -91,8 +91,34 @@ class BooksController extends Controller
     {
         $request = request();
 
+        $validator = Validator::make($request->all(), [
+            'id' => [ 'bail', 'required', 'integer', 'min:1', ],
+        ]);
+        if ($validator->fails()) return response([], 400);
+
         $book = Book::where('id', $request->id)->update([
-            'is_rental' => $request->is_rental
+            'is_rental' => true,
+        ]);
+
+        return response($book, 200);
+    }
+
+    /**
+     * 書籍返却
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function return()
+    {
+        $request = request();
+
+        $validator = Validator::make($request->all(), [
+            'id' => [ 'bail', 'required', 'integer', 'min:1', ],
+        ]);
+        if ($validator->fails()) return response([], 400);
+
+        $book = Book::where('id', $request->id)->update([
+            'is_rental' => false,
         ]);
 
         return response($book, 200);
