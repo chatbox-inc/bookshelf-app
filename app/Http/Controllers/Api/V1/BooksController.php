@@ -11,23 +11,37 @@ class BooksController extends Controller
     /**
      * 書籍一覧取得
      *
-     * @return Book[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function index()
     {
         $request = request();
-        return Book::select('id', 'title', 'is_rental')->take($request->count)->get();
+        $books = Book::select('id', 'title', 'is_rental')->take($request->count)->get();
+        return response($books, 200);
+    }
+
+    /**
+     * 書籍詳細取得
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function detail()
+    {
+        $request = request();
+        $book = Book::where('id', $request->id)->first();
+        return response($book, 200);
     }
 
     /**
      * 書籍追加
      *
-     * @return mixed
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function add()
     {
         $request = request();
-        return Book::create([
+
+        $book = Book::create([
             'title'         => $request->title,
             'url'           => $request->url,
             'img'           => $request->img,
@@ -38,16 +52,23 @@ class BooksController extends Controller
             'published_at'  => $request->published_at,
             'is_rental'     => $request->is_rental,
         ]);
+
+        return response($book, 200);
     }
 
     /**
-     * 書籍詳細取得
+     * 書籍貸出/返却
      *
-     * @return mixed
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function detail()
+    public function rental()
     {
         $request = request();
-        return Book::where('id', $request->id)->first();
+
+        $book = Book::where('id', $request->id)->update([
+            'is_rental' => $request->is_rental
+        ]);
+
+        return response($book, 200);
     }
 }

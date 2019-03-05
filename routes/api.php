@@ -21,6 +21,7 @@ Route::prefix('v1')->namespace('V1')->group(function () {
     Route::prefix('books')->group(function () {
         Route::get('/', 'BooksController@index');
         Route::post('/add', 'BooksController@add');
+        Route::patch('/rental', 'BooksController@rental');
         Route::get('/{id}', 'BooksController@detail');
     });
 });
