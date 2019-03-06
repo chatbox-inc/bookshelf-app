@@ -2,7 +2,10 @@ const pkg = require('./package')
 
 
 module.exports = {
-  mode: 'universal',
+	env: {
+		NUXT_APIDOMAIN: process.env.NUXT_APIDOMAIN
+	},
+	mode: 'universal',
 
   /*
   ** Headers of the page
@@ -41,7 +44,9 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-  ],
+    "@nuxtjs/dotenv",
+    "@nuxtjs/axios"
+],
 
   /*
   ** Build configuration
