@@ -9,3 +9,9 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
