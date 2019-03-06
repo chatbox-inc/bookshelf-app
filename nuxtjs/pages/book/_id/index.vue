@@ -36,7 +36,7 @@
             </tr>
         </table>
         <h2 class="mb-3">貸出履歴</h2>
-        <table class="table" v-if="history">
+        <table class="table" v-if="book">
             <thead>
             <tr>
                 <th>No.</th>
@@ -46,11 +46,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(bookHistory, index) in histories" :key="index">
-                <td>{{bookHistory.id}}</td>
-                <td>{{bookHistory.name}}</td>
-                <td>{{bookHistory.dateFrom}}</td>
-                <td>{{bookHistory.dateTo}}</td>
+            <tr v-for="(item, index) in book.rental" :key="index">
+                <td>{{item.rentalHistoryId}}</td>
+                <td>{{item.rentalPersonName}}</td>
+                <td>{{item.rentalDateFrom}}</td>
+                <td>{{item.rentalDateTo}}</td>
             </tr>
             </tbody>
         </table>

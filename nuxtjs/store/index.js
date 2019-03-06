@@ -14,12 +14,32 @@ export const mutations = {
 }
 
 export const actions = {
-    load(ctx) {
+    async load(ctx) {
         const bookItems = [
             {
                 "id": 1,
                 "title": "PHPの本",
-                "detail": "PHPの本詳細"
+                "detail": "PHPの本詳細",
+                "rental": [
+                    {
+                        "rentalHistoryId": 1,
+                        "rentalPersonName": "barbara",
+                        "rentalDateFrom": "2019-03-01",
+                        "rentalDateTo": "2019-03-10",
+                    },
+                    {
+                        "rentalHistoryId": 2,
+                        "rentalPersonName": "barbara2",
+                        "rentalDateFrom": "2019-03-01",
+                        "rentalDateTo": "2019-03-10",
+                    },
+                    {
+                        "rentalHistoryId": 3,
+                        "rentalPersonName": "barbara3",
+                        "rentalDateFrom": "2019-03-01",
+                        "rentalDateTo": "2019-03-10",
+                    }
+                ]
             },
             {
                 "id": 2,
@@ -33,7 +53,6 @@ export const actions = {
             }
         ]
         ctx.commit("setBooks", bookItems)
-
         const rentalItems = [
             {
                 "id": 1,
