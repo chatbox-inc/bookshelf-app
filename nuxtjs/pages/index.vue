@@ -18,7 +18,8 @@
           <tr v-for="(book, index) in books" :key="index">
               <td>{{index+1}}</td>
               <td>
-                  <router-link :to="`/book/${books[index].number}`">
+                  <!--<router-link :to="`/book/${books[index].number}`">-->
+                  <router-link :to="`/book/${book.id}`">
                   {{book.title}}
                   </router-link>
               </td>
@@ -34,16 +35,17 @@
 export default {
   data () {
     return {
-      books: [
-        {number: "1", title: "PHPの本"},
-        {number: "2", title: "HTMLの本"},
-        {number: "3", title: "CSSの本"},
-        {number: "4", title: "Javaの本"},
-        {number: "5", title: "デザインの本"},
-      ]
     }
-  }
-}
+  },
+  computed: {
+      books(){
+          return this.$store.state.books
+      }
+  },
+  mounted(){
+      this.$store.dispatch("load")
+    }
+ }
 </script>
 
 <style>

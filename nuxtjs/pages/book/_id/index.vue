@@ -1,14 +1,14 @@
 <template>
     <section>
         <h2 class="mb-3">書籍詳細</h2>
-        <table class="table">
+        <table class="table" v-if="book">
             <tr>
                 <th>書籍名</th>
-                <td>書籍名</td>
+                <td>{{book.title}}</td>
             </tr>
             <tr>
                 <th>内容詳細</th>
-                <td>詳細</td>
+                <td>{{book.detail}}</td>
             </tr>
             <tr>
                 <th>Amazon URL</th>
@@ -73,17 +73,23 @@
     export default {
         data () {
             return {
-                book: {
-                    number: "1.",
-                    title: "書籍のタイトル",
-                    detail: "書籍の詳細"
-                },
+                book: null,
                 history: {
                     number: "1",
                     name: "barbara",
                     date_from: "2019-03-01",
                     date_to: "2019-03-07",
                 }
+            }
+        },
+        mounted(){
+            for(let book of this.$store.state.books){
+                if(book.id == this.$route.params.id){
+                    this.book = book
+                }
+            }
+            if(!this.book){
+                this.$router.push("/")
             }
         }
     }
