@@ -12,27 +12,27 @@
             </tr>
             <tr>
                 <th>Amazon URL</th>
-                <td>URL</td>
+                <td>{{book.url}}</td>
             </tr>
             <tr>
                 <th>画像</th>
-                <td>内容</td>
+                <td>{{book.image}}</td>
             </tr>
             <tr>
                 <th>ISBN</th>
-                <td>内容</td>
+                <td>{{book.ISBN}}</td>
             </tr>
             <tr>
                 <th>著者</th>
-                <td>内容</td>
+                <td>{{book.author}}</td>
             </tr>
             <tr>
                 <th>出版社</th>
-                <td>内容</td>
+                <td>{{book.publisher}}</td>
             </tr>
             <tr>
                 <th>発行年</th>
-                <td>内容</td>
+                <td>{{book.publishedYear}}</td>
             </tr>
         </table>
         <h2 class="mb-3">貸出履歴</h2>
@@ -46,7 +46,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in book.rental" :key="index">
+            <tr v-for="(item, index) in book.rentalHistory" :key="index">
                 <td>{{item.rentalHistoryId}}</td>
                 <td>{{item.rentalPersonName}}</td>
                 <td>{{item.rentalDateFrom}}</td>
@@ -74,7 +74,6 @@
         data () {
             return {
                 book: null,
-                history: null,
             }
         },
         mounted(){
@@ -86,21 +85,7 @@
             if(!this.book){
                 this.$router.push("/")
             }
-            for(let history of this.$store.state.rentalHistory){
-                this.history = history
-            }
-            if(!this.history){
-                this.$router.push("/")
-            }
         },
-        computed: {
-            histories(){
-                return this.$store.state.rentalHistory
-            },
-            mounted(){
-                this.$store.dispatch("load")
-            }
-        }
     }
 </script>
 

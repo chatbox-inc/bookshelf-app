@@ -1,26 +1,27 @@
 export const state = () => ({
     books: [],
-    rentalHistory: []
 })
 
 export const mutations = {
-    setBooks (state, bookItems) {
-        state.books = bookItems
+    setBooks (state, bookDetails) {
+        state.books = bookDetails
     },
-    setRentalHistory (state, rentalItems) {
-        state.rentalHistory = rentalItems
-    },
-
 }
 
 export const actions = {
     async load(ctx) {
-        const bookItems = [
+        const bookDetails = [
             {
                 "id": 1,
                 "title": "PHPの本",
                 "detail": "PHPの本詳細",
-                "rental": [
+                "url": "内容",
+                "image": "内容",
+                "ISBN": "内容",
+                "author": "内容",
+                "publisher": "内容",
+                "publishedYear": "内容",
+                "rentalHistory": [
                     {
                         "rentalHistoryId": 1,
                         "rentalPersonName": "barbara",
@@ -44,29 +45,39 @@ export const actions = {
             {
                 "id": 2,
                 "title": "HTMLの本",
-                "detail": "HTMLの本詳細"
+                "detail": "HTMLの本詳細",
+                "url": "内容",
+                "image": "内容",
+                "ISBN": "内容",
+                "author": "内容",
+                "publisher": "内容",
+                "publishedYear": "内容",
+                "rentalHistory": [
+                    {
+                        "rentalHistoryId": 1,
+                        "rentalPersonName": "barbara",
+                        "rentalDateFrom": "2019-03-01",
+                        "rentalDateTo": "2019-03-10",
+                    }
+                ]
             },
             {
                 "id": 3,
                 "title": "CSSの本",
-                "detail": "CSSの本詳細"
+                "detail": "CSSの本詳細",
+                "url": "内容",
+                "image": "内容",
+                "ISBN": "内容",
+                "author": "内容",
+                "publisher": "内容",
+                "publishedYear": "内容",
+                "rentalHistory": [
+                    {
+
+                    }
+                ]
             }
         ]
-        ctx.commit("setBooks", bookItems)
-        const rentalItems = [
-            {
-                "id": 1,
-                "name": "barbara",
-                "dateFrom": "2019-03-01",
-                "dateTo": "2019-03-10"
-            },
-            {
-                "id": 2,
-                "name": "matsubara",
-                "dateFrom": "2019-03-10",
-                "dateTo": "2019-03-20"
-            }
-        ]
-        ctx.commit("setRentalHistory", rentalItems)
+        ctx.commit("setBooks", bookDetails)
     }
 }
