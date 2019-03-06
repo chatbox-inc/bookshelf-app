@@ -9,6 +9,11 @@
 $ make setup
 ```
 
+※初回以降、開発時には以下のコマンドのみを実行してください
+```bash
+$ php artisan serve
+```
+
 ### Nuxt
 Laravelのセットアップとは別タブのターミナルで実行
 ``` bash
@@ -16,5 +21,10 @@ $ npm install
 
 $ npm run generate
 
+$ npm run dev
+```
+
+※初回以降、開発時には以下のコマンドのみを実行してください
+```bash
 $ npm run dev
 ```
