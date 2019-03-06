@@ -1,16 +1,21 @@
 export const state = () => ({
-    books: []
+    books: [],
+    rentalHistory: []
 })
 
 export const mutations = {
-    set (state, items) {
-        state.books = items
+    setBooks (state, bookItems) {
+        state.books = bookItems
     },
+    setRentalHistory (state, rentalItems) {
+        state.rentalHistory = rentalItems
+    },
+
 }
 
 export const actions = {
     load(ctx) {
-        const items = [
+        const bookItems = [
             {
                 "id": 1,
                 "title": "PHPの本",
@@ -26,8 +31,23 @@ export const actions = {
                 "title": "CSSの本",
                 "detail": "CSSの本詳細"
             }
-
         ]
-        ctx.commit("set", items)
+        ctx.commit("setBooks", bookItems)
+
+        const rentalItems = [
+            {
+                "id": 1,
+                "name": "barbara",
+                "dateFrom": "2019-03-01",
+                "dateTo": "2019-03-10"
+            },
+            {
+                "id": 2,
+                "name": "matsubara",
+                "dateFrom": "2019-03-10",
+                "dateTo": "2019-03-20"
+            }
+        ]
+        ctx.commit("setRentalHistory", rentalItems)
     }
 }

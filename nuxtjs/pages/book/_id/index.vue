@@ -36,7 +36,7 @@
             </tr>
         </table>
         <h2 class="mb-3">貸出履歴</h2>
-        <table class="table">
+        <table class="table" v-if="history">
             <thead>
             <tr>
                 <th>No.</th>
@@ -46,11 +46,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>{{history.number}}</td>
-                <td>{{history.name}}</td>
-                <td>{{history.date_from}}</td>
-                <td>{{history.date_to}}</td>
+            <tr v-for="(bookHistory, index) in histories" :key="index">
+                <td>{{bookHistory.id}}</td>
+                <td>{{bookHistory.name}}</td>
+                <td>{{bookHistory.dateFrom}}</td>
+                <td>{{bookHistory.dateTo}}</td>
             </tr>
             </tbody>
         </table>
@@ -59,12 +59,12 @@
             <input type="text" class="form-control" placeholder="名前を入力してください">
             <div class="input-group-append">
                 <router-link to="/">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">借りる</button>
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">借りる</button>
                 </router-link>
             </div>
         </div>
         <div class="btn-back">
-        <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
+            <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
         </div>
     </section>
 </template>
@@ -74,12 +74,7 @@
         data () {
             return {
                 book: null,
-                history: {
-                    number: "1",
-                    name: "barbara",
-                    date_from: "2019-03-01",
-                    date_to: "2019-03-07",
-                }
+                history: null,
             }
         },
         mounted(){
@@ -91,12 +86,26 @@
             if(!this.book){
                 this.$router.push("/")
             }
+            for(let history of this.$store.state.rentalHistory){
+                this.history = history
+            }
+            if(!this.history){
+                this.$router.push("/")
+            }
+        },
+        computed: {
+            histories(){
+                return this.$store.state.rentalHistory
+            },
+            mounted(){
+                this.$store.dispatch("load")
+            }
         }
     }
 </script>
 
 <style>
-.btn-back{
-    padding-bottom: 20px;
-}
+    .btn-back{
+        padding-bottom: 20px;
+    }
 </style>
