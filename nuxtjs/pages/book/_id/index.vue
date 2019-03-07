@@ -46,11 +46,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in book.rentalHistory" :key="index">
-                <td>{{item.rentalHistoryId}}</td>
-                <td>{{item.rentalPersonName}}</td>
-                <td>{{item.rentalDateFrom}}</td>
-                <td>{{item.rentalDateTo}}</td>
+            <tr v-if="book">
+            <!--<tr v-for="(item, index) in book" :key="index">-->
+                <!--<td>{{book.title}}</td>-->
+                <!--<td>{{item.rentalPersonName}}</td>-->
+                <!--<td>{{item.rentalDateFrom}}</td>-->
+                <!--<td>{{item.rentalDateTo}}</td>-->
             </tr>
             </tbody>
         </table>
@@ -76,7 +77,8 @@
                 book: null,
             }
         },
-        mounted(){
+        async mounted(){
+            this.$store.dispatch("loadDetail", 1)
             for(let book of this.$store.state.books){
                 if(book.id == this.$route.params.id){
                     this.book = book
