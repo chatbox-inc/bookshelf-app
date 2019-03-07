@@ -12,31 +12,31 @@
             </tr>
             <tr>
                 <th>Amazon URL</th>
-                <td>URL</td>
+                <td>{{book.url}}</td>
             </tr>
             <tr>
                 <th>画像</th>
-                <td>内容</td>
+                <td>{{book.image}}</td>
             </tr>
             <tr>
                 <th>ISBN</th>
-                <td>内容</td>
+                <td>{{book.ISBN}}</td>
             </tr>
             <tr>
                 <th>著者</th>
-                <td>内容</td>
+                <td>{{book.author}}</td>
             </tr>
             <tr>
                 <th>出版社</th>
-                <td>内容</td>
+                <td>{{book.publisher}}</td>
             </tr>
             <tr>
                 <th>発行年</th>
-                <td>内容</td>
+                <td>{{book.publishedYear}}</td>
             </tr>
         </table>
         <h2 class="mb-3">貸出履歴</h2>
-        <table class="table">
+        <table class="table" v-if="book">
             <thead>
             <tr>
                 <th>No.</th>
@@ -46,11 +46,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>{{history.number}}</td>
-                <td>{{history.name}}</td>
-                <td>{{history.date_from}}</td>
-                <td>{{history.date_to}}</td>
+            <tr v-for="(item, index) in book.rentalHistory" :key="index">
+                <td>{{item.rentalHistoryId}}</td>
+                <td>{{item.rentalPersonName}}</td>
+                <td>{{item.rentalDateFrom}}</td>
+                <td>{{item.rentalDateTo}}</td>
             </tr>
             </tbody>
         </table>
@@ -59,12 +59,12 @@
             <input type="text" class="form-control" placeholder="名前を入力してください">
             <div class="input-group-append">
                 <router-link to="/">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">借りる</button>
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">借りる</button>
                 </router-link>
             </div>
         </div>
         <div class="btn-back">
-        <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
+            <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
         </div>
     </section>
 </template>
@@ -74,12 +74,6 @@
         data () {
             return {
                 book: null,
-                history: {
-                    number: "1",
-                    name: "barbara",
-                    date_from: "2019-03-01",
-                    date_to: "2019-03-07",
-                }
             }
         },
         mounted(){
@@ -91,12 +85,12 @@
             if(!this.book){
                 this.$router.push("/")
             }
-        }
+        },
     }
 </script>
 
 <style>
-.btn-back{
-    padding-bottom: 20px;
-}
+    .btn-back{
+        padding-bottom: 20px;
+    }
 </style>
