@@ -50,3 +50,9 @@ $ npm run dev
 ```
 
 ※Laravelにはオプションをつけることに注意
+
+## テスト
+
+```bash
+$ make test
+```
