@@ -43,7 +43,7 @@ class BooksController extends Controller
         ]);
         if ($validator->fails()) return response([], 400);
 
-        $book = Book::where('id', $request->id)->first();
+        $book = Book::where('id', $request->id)->first() ?: [];
         return response($book, 200);
     }
 
