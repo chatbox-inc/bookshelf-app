@@ -557,7 +557,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                  "dev-master": "6.3-dev"
+                    "dev-master": "6.3-dev"
                 }
             },
             "autoload": {
