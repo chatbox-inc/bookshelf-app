@@ -68,8 +68,14 @@
         },
         methods: {
             submit() {
+                this.$store.dispatch("addBook")
+                console.log("hoge")
                 this.$router.push("/")
             }
+        },
+        async mounted() {
+            // this.$store.dispatch("addBook")
+            // console.log("hogehogehoge")
         }
     }
 </script>
