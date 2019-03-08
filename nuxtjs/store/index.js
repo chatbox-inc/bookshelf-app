@@ -18,9 +18,8 @@ export const actions = {
         console.log(bookList)
         ctx.commit("setBooks",bookList)
     },
-    async loadDetail({commit},id) {
+    async loadDetail(ctx,id) {
         const bookDetail = await this.$axios.$get(`${process.env.NUXT_APIDOMAIN}/api/v1/books/${id}`)
-        // console.log(bookDetail)
-        // commit("setBookDetails",bookDetail)
+        ctx.commit("setBookDetails",bookDetail)
     }
 }
