@@ -31,6 +31,9 @@ Route::prefix('v1')->namespace('V1')->group(function () {
         // 書籍返却
         Route::post('/return', 'BooksController@return');
 
+        // 書籍検索
+        Route::get('/search', 'BooksController@search');
+
         // 書籍詳細取得
         Route::get('/{id}', 'BooksController@detail');
     });
