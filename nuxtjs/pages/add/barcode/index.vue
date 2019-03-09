@@ -2,18 +2,29 @@
    <div>
        <div id="scanner-container"></div>
        <input type="button" id="btn" value="Start/Stop the scanner">
+       <label>
+           結果
+       </label>
+       <input type="text" id="result">
    </div>
 </template>
 
 <script>
     import Quagga from 'quagga';
+    export default {
+        head() {
+            return {
+                title: 'barcode'
+            }
+        }
+    }
         var _scannerIsRunning = false;
     function startScanner() {
-        Quagga.init({
+        Quagga.init({ //←カメラと同期させるときはこれから始める
             inputStream: {
                 name: "Live",
-                type: "LiveStream",
-                target: '#scanner-container',
+                type: "LiveStream", //カメラモード
+                target: document.querySelector('#scanner-container'),
                 constraints: {
                     width: 480,
                     height: 320,
@@ -21,7 +32,7 @@
                 },
             },
             decoder: {
-                readers: [
+                readers: [ //バーコードの種類を設定
                     "code_128_reader",
                     "ean_reader",
                     "ean_8_reader",
@@ -60,11 +71,12 @@
             _scannerIsRunning = true;
         });
 
-        Quagga.onProcessed(function (result) {
+        Quagga.onProcessed(function (result) { //resultはonProcessed, onDetectedを使用時のみに帰ってくるオブジェクト
             var drawingCtx = Quagga.canvas.ctx.overlay,
                 drawingCanvas = Quagga.canvas.dom.overlay;
 
             if (result) {
+                //線を引いてresultを描写
                 if (result.boxes) {
                     drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
                     result.boxes.filter(function (box) {
@@ -84,22 +96,24 @@
             }
         });
 
-
         Quagga.onDetected(function (result) {
+            //解析結果をconsoleに表示
             console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
+
+                if (process.browser) {
+                    document.getElementById('result').value = result.codeResult.code;
+                }
         });
     }
 
-
-    // Start/stop scanner
-    if(process.browser) {
-        document.getElementById("btn").addEventListener("click", function () {
-            if (_scannerIsRunning) {
-                Quagga.stop();
-            } else {
-                startScanner();
-            }
-        }, false);
+        if(process.browser) {
+            document.getElementById("btn").addEventListener("click", function () {
+                if (_scannerIsRunning) {
+                    Quagga.stop();
+                } else {
+                    startScanner();
+                }
+            }, false);
     }
 
 </script>
