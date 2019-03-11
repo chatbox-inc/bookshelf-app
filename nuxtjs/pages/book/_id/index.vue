@@ -1,42 +1,42 @@
 <template>
     <section>
         <h2 class="mb-3">書籍詳細</h2>
-        <table class="table" v-if="book">
+        <table class="table" v-if="details">
             <tr>
                 <th>書籍名</th>
-                <td>{{book.title}}</td>
+                <td>{{details.title}}</td>
             </tr>
             <tr>
                 <th>内容詳細</th>
-                <td>{{book.detail}}</td>
+                <td>{{details.description}}</td>
             </tr>
             <tr>
                 <th>Amazon URL</th>
-                <td>URL</td>
+                <td>{{details.url}}</td>
             </tr>
             <tr>
                 <th>画像</th>
-                <td>内容</td>
+                <td>{{details.img}}</td>
             </tr>
             <tr>
                 <th>ISBN</th>
-                <td>内容</td>
+                <td>{{details.isbn}}</td>
             </tr>
             <tr>
                 <th>著者</th>
-                <td>内容</td>
+                <td>{{details.author}}</td>
             </tr>
             <tr>
                 <th>出版社</th>
-                <td>内容</td>
+                <td>{{details.publisher}}</td>
             </tr>
             <tr>
                 <th>発行年</th>
-                <td>内容</td>
+                <td>{{details.published_at}}</td>
             </tr>
         </table>
         <h2 class="mb-3">貸出履歴</h2>
-        <table class="table">
+        <table class="table" v-if="book">
             <thead>
             <tr>
                 <th>No.</th>
@@ -46,11 +46,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>{{history.number}}</td>
-                <td>{{history.name}}</td>
-                <td>{{history.date_from}}</td>
-                <td>{{history.date_to}}</td>
+            <tr v-if="details">
+            <!--<tr v-for="(item, index) in details" :key="index">-->
+                <!--<td>{{book.title}}</td>-->
+                <!--<td>{{item.rentalPersonName}}</td>-->
+                <!--<td>{{item.rentalDateFrom}}</td>-->
+                <!--<td>{{item.rentalDateTo}}</td>-->
             </tr>
             </tbody>
         </table>
@@ -59,12 +60,12 @@
             <input type="text" class="form-control" placeholder="名前を入力してください">
             <div class="input-group-append">
                 <router-link to="/">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">借りる</button>
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">借りる</button>
                 </router-link>
             </div>
         </div>
         <div class="btn-back">
-        <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
+            <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
         </div>
     </section>
 </template>
@@ -74,15 +75,17 @@
         data () {
             return {
                 book: null,
-                history: {
-                    number: "1",
-                    name: "barbara",
-                    date_from: "2019-03-01",
-                    date_to: "2019-03-07",
-                }
             }
         },
-        mounted(){
+        computed: {
+          bookId() {
+              return this.book.id
+          },
+          details() {
+              return this.$store.state.details
+          }
+        },
+        async mounted(){
             for(let book of this.$store.state.books){
                 if(book.id == this.$route.params.id){
                     this.book = book
@@ -91,12 +94,13 @@
             if(!this.book){
                 this.$router.push("/")
             }
-        }
+            this.$store.dispatch("loadDetail", this.bookId)
+        },
     }
 </script>
 
 <style>
-.btn-back{
-    padding-bottom: 20px;
-}
+    .btn-back{
+        padding-bottom: 20px;
+    }
 </style>

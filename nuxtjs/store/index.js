@@ -1,11 +1,15 @@
 export const state = () => ({
-    books: []
+    books: [],
+    details: []
 })
 
 export const mutations = {
-    set (state, items) {
-        state.books = items
+    setBooks (state, books) {
+        state.books = books
     },
+    setBookDetails (state, details) {
+        state.details = details
+    }
 }
 
 export const actions = {

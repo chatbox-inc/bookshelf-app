@@ -43,8 +43,6 @@ export default {
     }
   },
   async mounted(){
-    const ip = await this.$axios.$get(`${process.env.NUXT_APIDOMAIN}/api/v1/books`)
-    console.log(ip) //axiosの使い方見本
     this.$store.dispatch("load")
   }
  }
