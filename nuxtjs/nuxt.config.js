@@ -58,5 +58,9 @@ module.exports = {
     extend(config, ctx) {
       
     }
+  },
+
+  server: {
+    host: '0.0.0.0'
   }
 }

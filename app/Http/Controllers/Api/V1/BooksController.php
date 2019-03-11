@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use Illuminate\Validation\ValidationException;
 use Validator;
+use GuzzleHttp\Client as Guzzle;
+use Isbn\Isbn;
 
 class BooksController extends Controller
 {
@@ -64,7 +66,7 @@ class BooksController extends Controller
             'url'           => [ 'required', 'url', ],
             'img'           => [ 'required', 'url', ],
             'description'   => [ 'required', 'string', ],
-            'isbn'          => [ 'required', 'string', 'regex:/^([0-9]{9}[0-9X]{1}|[0-9]{13})$/' ],
+            'isbn'          => [ 'required', 'string', 'regex:/^([0-9]{9}[0-9X]{1}|[0-9]{3}-[0-9]{10})$/' ],
             'author'        => [ 'required', 'string', ],
             'publisher'     => [ 'required', 'string', ],
             'published_at'  => [ 'required', 'date', ],
@@ -127,5 +129,29 @@ class BooksController extends Controller
         ]);
 
         return response($book, 200);
+    }
+
+    /**
+     * 書籍検索
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Isbn\Exception
+     */
+    public function search()
+    {
+        $request = request();
+
+        $validator = Validator::make($request->all(), [
+            'isbn' => [ 'required', 'string', 'regex:/^([0-9]{9}[0-9X]{1}|[0-9]{3}-[0-9]{10})$/' ],
+        ]);
+        if ($validator->fails()) return response([], 400);
+
+        // ISBN13ならISBN10に変換(Google Books APIがISBN13非対応なため)
+        $isbn = new Isbn();
+        $isbn10 = $isbn->check->is13($request->isbn) ? $isbn->translate->to10($request->isbn) : $request->isbn;
+
+        $response = (new Guzzle())->request('GET', "https://www.googleapis.com/books/v1/volumes?q=isbn:{$isbn10}")->getBody();
+        return response($response, 200)->header('Content-type', 'application/json');
     }
 }
