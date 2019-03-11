@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use Illuminate\Validation\ValidationException;
 use Validator;
 use GuzzleHttp\Client as Guzzle;
 use Isbn\Isbn;
@@ -34,16 +35,20 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function detail()
+    public function detail($id)
     {
         $request = request();
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make([
+        	"id" => $id
+		], [
             'id' => [ 'bail', 'required', 'integer', 'min:1', ],
         ]);
-        if ($validator->fails()) return response([], 400);
+        if ($validator->fails()) {
+        	throw new ValidationException($validator);
+		};
 
-        $book = Book::where('id', $request->id)->first() ?: [];
+        $book = Book::where('id', $id)->first();
         return response($book, 200);
     }
 

@@ -1,38 +1,38 @@
 <template>
     <section>
         <h2 class="mb-3">書籍詳細</h2>
-        <table class="table" v-if="book">
+        <table class="table" v-if="details">
             <tr>
                 <th>書籍名</th>
-                <td>{{book.title}}</td>
+                <td>{{details.title}}</td>
             </tr>
             <tr>
                 <th>内容詳細</th>
-                <td>{{book.detail}}</td>
+                <td>{{details.description}}</td>
             </tr>
             <tr>
                 <th>Amazon URL</th>
-                <td>{{book.url}}</td>
+                <td>{{details.url}}</td>
             </tr>
             <tr>
                 <th>画像</th>
-                <td>{{book.image}}</td>
+                <td>{{details.img}}</td>
             </tr>
             <tr>
                 <th>ISBN</th>
-                <td>{{book.ISBN}}</td>
+                <td>{{details.isbn}}</td>
             </tr>
             <tr>
                 <th>著者</th>
-                <td>{{book.author}}</td>
+                <td>{{details.author}}</td>
             </tr>
             <tr>
                 <th>出版社</th>
-                <td>{{book.publisher}}</td>
+                <td>{{details.publisher}}</td>
             </tr>
             <tr>
                 <th>発行年</th>
-                <td>{{book.publishedYear}}</td>
+                <td>{{details.published_at}}</td>
             </tr>
         </table>
         <h2 class="mb-3">貸出履歴</h2>
@@ -46,11 +46,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in book.rentalHistory" :key="index">
-                <td>{{item.rentalHistoryId}}</td>
-                <td>{{item.rentalPersonName}}</td>
-                <td>{{item.rentalDateFrom}}</td>
-                <td>{{item.rentalDateTo}}</td>
+            <tr v-if="details">
+            <!--<tr v-for="(item, index) in details" :key="index">-->
+                <!--<td>{{book.title}}</td>-->
+                <!--<td>{{item.rentalPersonName}}</td>-->
+                <!--<td>{{item.rentalDateFrom}}</td>-->
+                <!--<td>{{item.rentalDateTo}}</td>-->
             </tr>
             </tbody>
         </table>
@@ -76,7 +77,15 @@
                 book: null,
             }
         },
-        mounted(){
+        computed: {
+          bookId() {
+              return this.book.id
+          },
+          details() {
+              return this.$store.state.details
+          }
+        },
+        async mounted(){
             for(let book of this.$store.state.books){
                 if(book.id == this.$route.params.id){
                     this.book = book
@@ -85,6 +94,7 @@
             if(!this.book){
                 this.$router.push("/")
             }
+            this.$store.dispatch("loadDetail", this.bookId)
         },
     }
 </script>
