@@ -9,25 +9,18 @@ export const mutations = {
 }
 
 export const actions = {
-    load(ctx) {
-        const items = [
-            {
-                "id": 1,
-                "title": "PHPの本",
-                "detail": "PHPの本詳細"
-            },
-            {
-                "id": 2,
-                "title": "HTMLの本",
-                "detail": "HTMLの本詳細"
-            },
-            {
-                "id": 3,
-                "title": "CSSの本",
-                "detail": "CSSの本詳細"
-            }
-
-        ]
-        ctx.commit("set", items)
+    async load(ctx) {
+        const bookList = await this.$axios.$get(`${process.env.NUXT_APIDOMAIN}/api/v1/books`)
+        ctx.commit("setBooks",bookList)
+    },
+    async loadDetail(ctx,id) {
+        const bookDetail = await this.$axios.$get(`${process.env.NUXT_APIDOMAIN}/api/v1/books/${id}`)
+        ctx.commit("setBookDetails",bookDetail)
+    },
+    async addBook(ctx,{form}) {
+        const addBooks = await this.$axios.$post(`${process.env.NUXT_APIDOMAIN}/api/v1/books/add`,{
+            form
+        })
+        ctx.commit("setAddbook",addBooks)
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use Illuminate\Validation\ValidationException;
 use Validator;
 
 class BooksController extends Controller
@@ -54,29 +55,32 @@ class BooksController extends Controller
     {
         $request = request();
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(),[
             'title'         => [ 'required', 'string', ],
             'url'           => [ 'required', 'url', ],
-            'img'           => [ 'required', 'url', ],
+//            'img'           => [ 'required', 'url', ],
             'description'   => [ 'required', 'string', ],
             'isbn'          => [ 'required', 'string', 'regex:/^([0-9]{9}[0-9X]{1}|[0-9]{13})$/' ],
             'author'        => [ 'required', 'string', ],
             'publisher'     => [ 'required', 'string', ],
             'published_at'  => [ 'required', 'date', ],
-            'is_rental'     => [ 'required', 'boolean', ],
+//            'is_rental'     => [ 'required', 'boolean', ],
         ]);
-        if ($validator->fails()) return response([], 400);
+		if ($validator->fails()) {
+			throw new ValidationException($validator);
+		};
+//        if ($validator->fails()) return response([], 400);
 
         $book = Book::create([
             'title'         => $request->title,
             'url'           => $request->url,
-            'img'           => $request->img,
+//            'img'           => $request->img,
             'description'   => $request->description,
             'isbn'          => $request->isbn,
             'author'        => $request->author,
             'publisher'     => $request->publisher,
             'published_at'  => $request->published_at,
-            'is_rental'     => $request->is_rental,
+//            'is_rental'     => $request->is_rental,
         ]);
 
         return response($book, 200);
