@@ -1,6 +1,10 @@
 <template>
     <section>
         <h2>書籍追加</h2>
+        <fieldset class="input-group">
+            <label for="barcode_upload" class="btn btn-outline-secondary">バーコード画像から書籍情報を検索</label>
+            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="upload"/>
+        </fieldset>
         <div>
             <form>
                 <div class="form-group">
@@ -57,26 +61,61 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                form: {
-                    title: "",
-                    body: ""
-                }
-            }
-        },
-        methods: {
-            submit() {
-                this.$router.push("/")
+import Quagga from 'quagga';
+
+export default {
+    data() {
+        return {
+            form: {
+                title: "",
+                body: ""
+            },
+            config: {
+                inputStream: {
+                    size: 800,
+                    singleChannel: false
+                },
+                locator: {
+                    patchSize: "medium",
+                    halfSample: true
+                },
+                decoder: {
+                    readers: [{
+                        format: "ean_reader",
+                        config: {}
+                    }]
+                },
+                locate: true,
+                src: null
             }
         }
+    },
+    methods: {
+        submit() {
+            this.$router.push("/")
+        },
+        upload(e) {
+            const file = e.target.files[0]
+            if (file) {
+                this.decode(URL.createObjectURL(file));
+            }
+        },
+        decode(src) {
+            this.config.src = src
+            Quagga.decodeSingle(this.config, (result) => {
+                !!result ? console.log(result.codeResult.code) : console.log("barcode image is not uploaded")
+            });
+        }
     }
+}
 </script>
 
 <style>
 .btn-back{
     padding-top: 15px;
     padding-bottom: 20px;
+}
+.barcode_input {
+    display: none;
 }
 </style>
