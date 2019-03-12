@@ -70,7 +70,6 @@ class BooksController extends Controller
             'author'        => [ 'required', 'string', ],
             'publisher'     => [ 'required', 'string', ],
             'published_at'  => [ 'required', 'date', ],
-            'is_rental'     => [ 'required', 'boolean', ],
         ]);
 		if ($validator->fails()) {
 			throw new ValidationException($validator);
@@ -85,7 +84,7 @@ class BooksController extends Controller
 			'author'        => $request->author,
 			'publisher'     => $request->publisher,
 			'published_at'  => $request->published_at,
-			'is_rental'     => $request->is_rental,
+			'is_rental'     => true,
 		]);
 
 		return response($book, 200);
