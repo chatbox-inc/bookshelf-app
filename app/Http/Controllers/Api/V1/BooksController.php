@@ -72,22 +72,24 @@ class BooksController extends Controller
             'published_at'  => [ 'required', 'date', ],
             'is_rental'     => [ 'required', 'boolean', ],
         ]);
-        if ($validator->fails()) return response([], 400);
+		if ($validator->fails()) {
+			throw new ValidationException($validator);
+		};
 
-        $book = Book::create([
-            'title'         => $request->title,
-            'url'           => $request->url,
-            'img'           => $request->img,
-            'description'   => $request->description,
-            'isbn'          => $request->isbn,
-            'author'        => $request->author,
-            'publisher'     => $request->publisher,
-            'published_at'  => $request->published_at,
-            'is_rental'     => $request->is_rental,
-        ]);
+		$book = Book::create([
+			'title'         => $request->title,
+			'url'           => $request->url,
+			'img'           => $request->img,
+			'description'   => $request->description,
+			'isbn'          => $request->isbn,
+			'author'        => $request->author,
+			'publisher'     => $request->publisher,
+			'published_at'  => $request->published_at,
+			'is_rental'     => $request->is_rental,
+		]);
 
-        return response($book, 200);
-    }
+		return response($book, 200);
+	}
 
     /**
      * 書籍貸出
