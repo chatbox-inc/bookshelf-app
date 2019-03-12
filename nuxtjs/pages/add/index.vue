@@ -9,43 +9,43 @@
             <form>
                 <div class="form-group">
                     <label>書籍名</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.title">
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label>書籍詳細</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.description">
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label>Amazon URL</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.url">
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label>ISBN</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.isbn">
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label>著者</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.author">
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label>出版社</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.publisher">
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label>発行年</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" v-model="form.published_at">
                 </div>
             </form>
             <form>
@@ -68,7 +68,13 @@ export default {
         return {
             form: {
                 title: "",
-                body: ""
+                url: "",
+                img: "",
+                description: "",
+                isbn: "",
+                author: "",
+                publisher: "",
+                published_at: ""
             },
             config: {
                 inputStream: {
@@ -92,6 +98,9 @@ export default {
     },
     methods: {
         submit() {
+            this.$store.dispatch("addBook",{
+                form: this.form
+            })
             this.$router.push("/")
         },
         upload(e) {
