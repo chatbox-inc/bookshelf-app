@@ -146,12 +146,12 @@ class BooksController extends Controller
         $validator = Validator::make($request->all(), [
             'isbn' => [ 'required', 'string', 'regex:/^([0-9]{9}[0-9X]{1}|[0-9]{3}-[0-9]{10})$/' ],
         ]);
-        if ($validator->fails()) return response([], 400);
-
+		if ($validator->fails()) {
+			throw new ValidationException($validator);
+		};
         // ISBN13ならISBN10に変換(Google Books APIがISBN13非対応なため)
         $isbn = new Isbn();
         $isbn10 = $isbn->check->is13($request->isbn) ? $isbn->translate->to10($request->isbn) : $request->isbn;
-
         $response = (new Guzzle())->request('GET', "https://www.googleapis.com/books/v1/volumes?q=isbn:{$isbn10}")->getBody();
         return response($response, 200)->header('Content-type', 'application/json');
     }
