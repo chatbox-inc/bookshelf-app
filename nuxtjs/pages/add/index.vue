@@ -113,6 +113,10 @@ export default {
             this.config.src = src
             Quagga.decodeSingle(this.config, (result) => {
                 !!result ? console.log(result.codeResult.code) : console.log("barcode image is not uploaded")
+                let isbn = result.codeResult.code
+                const isbn3 = isbn.substring(0, 3)
+                const isbn10 = isbn.substring(3)
+                isbn = isbn3+"-"+isbn10
             });
         }
     }
