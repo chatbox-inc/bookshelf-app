@@ -39,6 +39,7 @@ export default {
   },
   computed: {
     books(){
+        console.log("books", this.$store.state.books)
         return this.$store.state.books
     }
   },

@@ -3,7 +3,7 @@
         <h2>書籍追加</h2>
         <fieldset class="input-group">
             <label for="barcode_upload" class="btn btn-outline-secondary">バーコード画像から書籍情報を検索</label>
-            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="seachByBarcode"/>
+            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="searchByBarcode"/>
         </fieldset>
         <div>
             <form>
@@ -56,6 +56,24 @@
             <div class="btn-back">
                 <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
             </div>
+            <div v-if="information">
+            <p>{{ information.title }}</p>
+            <p>{{ information.description }}</p>
+            <p>{{ information.authors}}</p>
+            <p>{{ information.publishedDate }}</p>
+            </div>
+            <!--<div v-if="information">-->
+                <!--<p v-for="(item,index) in information.authors" :key="index">-->
+                    <!--{{ item.authors }}-->
+                <!--</p>-->
+            <!--</div>-->
+            <div v-if="information">
+                <p v-for="(item,index) in information.industryIdentifiers" :key="index">
+                    <span v-if="item.type == 'ISBN_13'">
+                        {{ item.identifier }}
+                    </span>
+                </p>
+            </div>
         </div>
     </section>
 </template>
@@ -96,6 +114,16 @@ export default {
             }
         }
     },
+    computed: {
+        information() {
+            if (this.$store.state.information) {
+                console.log(this.$store.state.information.volumeInfo, "hoge")
+                this.setInformation()
+                return this.$store.state.information.volumeInfo
+
+            }
+        },
+    },
     methods: {
         submit() {
             this.$store.dispatch("addBook",{
@@ -103,7 +131,7 @@ export default {
             })
             this.$router.push("/")
         },
-        seachByBarcode(e) {
+        searchByBarcode(e) {
             const file = e.target.files[0]
             if (file) {
                 this.decode(URL.createObjectURL(file));
@@ -123,10 +151,29 @@ export default {
         },
         getBookInfo(isbn) {
             this.$store.dispatch("addByIsbn", isbn)
-        }
-    },
-    async mounted(){
+        },
+        setInformation() {
+            if(this.$store.state.information.volumeInfo){
+                console.log(this.$store.state.information.volumeInfo.title, "piyo")
+                this.form.title = this.$store.state.information.volumeInfo.title
+                this.form.description = this.$store.state.information.volumeInfo.description
+                this.form.published_at = this.$store.state.information.volumeInfo.publishedDate
+                // this.form.title = this.$store.state.information.volumeInfo.title
+            }
 
+            // return {
+            //     form: {
+            //         title: this.$store.state.information.volumeInfo.title,
+            //         // url: "",
+            //         // img: "",
+            //         // description: information.description,
+            //         // isbn: "",
+            //         // author: information.authors,
+            //         // publisher: "",
+            //         // published_at: information.publishedDate
+            //     },
+            // }
+        }
     }
 }
 </script>
