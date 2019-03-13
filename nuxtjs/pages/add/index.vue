@@ -3,7 +3,7 @@
         <h2>書籍追加</h2>
         <fieldset class="input-group">
             <label for="barcode_upload" class="btn btn-outline-secondary">バーコード画像から書籍情報を検索</label>
-            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="upload"/>
+            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="seachByBarcode"/>
         </fieldset>
         <div>
             <form>
@@ -103,7 +103,7 @@ export default {
             })
             this.$router.push("/")
         },
-        upload(e) {
+        seachByBarcode(e) {
             const file = e.target.files[0]
             if (file) {
                 this.decode(URL.createObjectURL(file));
@@ -112,13 +112,21 @@ export default {
         decode(src) {
             this.config.src = src
             Quagga.decodeSingle(this.config, (result) => {
-                !!result ? console.log(result.codeResult.code) : console.log("barcode image is not uploaded")
-                let isbn = result.codeResult.code
-                const isbn3 = isbn.substring(0, 3)
-                const isbn10 = isbn.substring(3)
-                isbn = isbn3+"-"+isbn10
+                let isbn = this.formatIsbn(result.codeResult.code)
+                this.getBookInfo(isbn)
             });
+        },
+        formatIsbn(isbn) {
+            const isbn3 = isbn.substring(0, 3)
+            const isbn10 = isbn.substring(3)
+            return isbn3+"-"+isbn10
+        },
+        getBookInfo(isbn) {
+            this.$store.dispatch("addByIsbn", isbn)
         }
+    },
+    async mounted(){
+
     }
 }
 </script>
