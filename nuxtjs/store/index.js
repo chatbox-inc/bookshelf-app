@@ -1,7 +1,16 @@
 export const state = () => ({
     books: [],
     details: [],
-    information: null
+    information: {
+        title: "",
+        description: "",
+        url: "",
+        isbn: "",
+        author: "",
+        publisher: "",
+        published_at: "",
+        img: ""
+    }
 })
 
 export const mutations = {
@@ -34,14 +43,7 @@ export const actions = {
                 isbn: isbn
             }
         })
+        console.log(bookInformation,"bookInformation")
         ctx.commit("setIsbn",bookInformation.items[0])
-        // console.log("hoge", ctx.state.information)
-
-        // console.log(bookInformation)
-        // console.log(bookInformation.items[0].volumeInfo.title)
-        // console.log(bookInformation.items[0].volumeInfo.description)
-        // console.log(bookInformation.items[0].volumeInfo.authors[0])
-        // console.log(bookInformation.items[0].volumeInfo.publishedDate)
-        // console.log(bookInformation.items[0].volumeInfo.industryIdentifiers[1].identifier)
     },
 }

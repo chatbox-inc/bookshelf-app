@@ -56,13 +56,6 @@
             <div class="btn-back">
                 <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
             </div>
-            <div v-if="information">
-                <!--<p v-for="(item,index) in information.industryIdentifiers" :key="index">-->
-                    <!--<span v-if="item.type == 'ISBN_13'">-->
-                        <!--{{ item.identifier }}-->
-                    <!--</span>-->
-                <!--</p>-->
-            </div>
         </div>
     </section>
 </template>
@@ -104,12 +97,24 @@ export default {
         }
     },
     computed: {
+        _bookInfo() {
+            return this.$store.state.information
+        },
         information() {
-            if (this.$store.state.information) {
-                this.setForm()
-                return this.$store.state.information.volumeInfo
+            return {
+                title: this._bookInfo.title,
+                description: this._bookInfo.description,
+                url: this._bookInfo.url,
+                isbn: this._bookInfo.isbn,
+                author: this._bookInfo.author,
+                publisher: this._bookInfo.publisher,
+                published_at: this._bookInfo.published_at,
+                img: this._bookInfo.img
             }
         },
+    },
+    created() {
+        this.form = { ...this.information }
     },
     methods: {
         submit() {
@@ -143,9 +148,11 @@ export default {
             if(this.$store.state.information.volumeInfo){
                 this.form.title = this.$store.state.information.volumeInfo.title
                 this.form.description = this.$store.state.information.volumeInfo.description
+                this.form.url = this.$store.state.information.volumeInfo.infoLink
                 this.form.isbn = this.$store.state.information.volumeInfo.industryIdentifiers[1].identifier
                 this.form.author = this.$store.state.information.volumeInfo.authors
                 this.form.published_at = this.$store.state.information.volumeInfo.publishedDate
+                this.form.img = this.$store.state.information.volumeInfo.infoLink
             }
         }
     }
