@@ -51,28 +51,17 @@
             <form>
                     <label>画像</label><br>
                     <input type="file">
-                <a class="btn btn-primary" tabindex="" @click="submit">追加</a>
+                <a class="btn btn-primary pull-right" tabindex="" @click="submit">追加</a>
             </form>
             <div class="btn-back">
                 <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
             </div>
             <div v-if="information">
-            <p>{{ information.title }}</p>
-            <p>{{ information.description }}</p>
-            <p>{{ information.authors}}</p>
-            <p>{{ information.publishedDate }}</p>
-            </div>
-            <!--<div v-if="information">-->
-                <!--<p v-for="(item,index) in information.authors" :key="index">-->
-                    <!--{{ item.authors }}-->
+                <!--<p v-for="(item,index) in information.industryIdentifiers" :key="index">-->
+                    <!--<span v-if="item.type == 'ISBN_13'">-->
+                        <!--{{ item.identifier }}-->
+                    <!--</span>-->
                 <!--</p>-->
-            <!--</div>-->
-            <div v-if="information">
-                <p v-for="(item,index) in information.industryIdentifiers" :key="index">
-                    <span v-if="item.type == 'ISBN_13'">
-                        {{ item.identifier }}
-                    </span>
-                </p>
             </div>
         </div>
     </section>
@@ -86,13 +75,13 @@ export default {
         return {
             form: {
                 title: "",
-                url: "",
-                img: "",
                 description: "",
+                url: "",
                 isbn: "",
                 author: "",
                 publisher: "",
-                published_at: ""
+                published_at: "",
+                img: ""
             },
             config: {
                 inputStream: {
@@ -117,10 +106,8 @@ export default {
     computed: {
         information() {
             if (this.$store.state.information) {
-                console.log(this.$store.state.information.volumeInfo, "hoge")
-                this.setInformation()
+                this.setForm()
                 return this.$store.state.information.volumeInfo
-
             }
         },
     },
@@ -152,27 +139,14 @@ export default {
         getBookInfo(isbn) {
             this.$store.dispatch("addByIsbn", isbn)
         },
-        setInformation() {
+        setForm() {
             if(this.$store.state.information.volumeInfo){
-                console.log(this.$store.state.information.volumeInfo.title, "piyo")
                 this.form.title = this.$store.state.information.volumeInfo.title
                 this.form.description = this.$store.state.information.volumeInfo.description
+                this.form.isbn = this.$store.state.information.volumeInfo.industryIdentifiers[1].identifier
+                this.form.author = this.$store.state.information.volumeInfo.authors
                 this.form.published_at = this.$store.state.information.volumeInfo.publishedDate
-                // this.form.title = this.$store.state.information.volumeInfo.title
             }
-
-            // return {
-            //     form: {
-            //         title: this.$store.state.information.volumeInfo.title,
-            //         // url: "",
-            //         // img: "",
-            //         // description: information.description,
-            //         // isbn: "",
-            //         // author: information.authors,
-            //         // publisher: "",
-            //         // published_at: information.publishedDate
-            //     },
-            // }
         }
     }
 }
