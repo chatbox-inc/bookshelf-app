@@ -1,6 +1,16 @@
 export const state = () => ({
     books: [],
-    details: []
+    details: [],
+    information: {
+        title: "",
+        description: "",
+        url: "",
+        isbn: "",
+        author: "",
+        publisher: "",
+        published_at: "",
+        img: ""
+    }
 })
 
 export const mutations = {
@@ -9,6 +19,9 @@ export const mutations = {
     },
     setBookDetails (state, details) {
         state.details = details
+    },
+    setIsbn (state, information) {
+        state.information = information
     }
 }
 
@@ -23,5 +36,14 @@ export const actions = {
     },
     async addBook(ctx,{form}) {
         const addBooks = await this.$axios.$post(`${process.env.NUXT_APIDOMAIN}/api/v1/books/add`, form)
-    }
+    },
+    async addByIsbn(ctx,isbn) {
+        const bookInformation = await this.$axios.$get(`${process.env.NUXT_APIDOMAIN}/api/v1/books/search`,{
+            params: {
+                isbn: isbn
+            }
+        })
+        console.log(bookInformation,"bookInformation")
+        ctx.commit("setIsbn",bookInformation.items[0])
+    },
 }

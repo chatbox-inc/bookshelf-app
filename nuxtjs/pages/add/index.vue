@@ -3,7 +3,7 @@
         <h2>書籍追加</h2>
         <fieldset class="input-group">
             <label for="barcode_upload" class="btn btn-outline-secondary">バーコード画像から書籍情報を検索</label>
-            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="upload"/>
+            <input id="barcode_upload" class="barcode_input" type="file" accept="image/*" capture="camera" @change="searchByBarcode"/>
         </fieldset>
         <div>
             <form>
@@ -51,7 +51,7 @@
             <form>
                     <label>画像</label><br>
                     <input type="file">
-                <a class="btn btn-primary" tabindex="" @click="submit">追加</a>
+                <a class="btn btn-primary pull-right" tabindex="" @click="submit">追加</a>
             </form>
             <div class="btn-back">
                 <router-link class="btn btn-outline-primary" to="/">戻る</router-link>
@@ -68,13 +68,13 @@ export default {
         return {
             form: {
                 title: "",
-                url: "",
-                img: "",
                 description: "",
+                url: "",
                 isbn: "",
                 author: "",
                 publisher: "",
-                published_at: ""
+                published_at: "",
+                img: ""
             },
             config: {
                 inputStream: {
@@ -96,6 +96,26 @@ export default {
             }
         }
     },
+    computed: {
+        _bookInfo() {
+            return this.$store.state.information
+        },
+        information() {
+            return {
+                title: this._bookInfo.title,
+                description: this._bookInfo.description,
+                url: this._bookInfo.url,
+                isbn: this._bookInfo.isbn,
+                author: this._bookInfo.author,
+                publisher: this._bookInfo.publisher,
+                published_at: this._bookInfo.published_at,
+                img: this._bookInfo.img
+            }
+        },
+    },
+    created() {
+        this.form = { ...this.information }
+    },
     methods: {
         submit() {
             this.$store.dispatch("addBook",{
@@ -103,7 +123,7 @@ export default {
             })
             this.$router.push("/")
         },
-        upload(e) {
+        searchByBarcode(e) {
             const file = e.target.files[0]
             if (file) {
                 this.decode(URL.createObjectURL(file));
@@ -112,8 +132,28 @@ export default {
         decode(src) {
             this.config.src = src
             Quagga.decodeSingle(this.config, (result) => {
-                !!result ? console.log(result.codeResult.code) : console.log("barcode image is not uploaded")
+                let isbn = this.formatIsbn(result.codeResult.code)
+                this.getBookInfo(isbn)
             });
+        },
+        formatIsbn(isbn) {
+            const isbn3 = isbn.substring(0, 3)
+            const isbn10 = isbn.substring(3)
+            return isbn3+"-"+isbn10
+        },
+        getBookInfo(isbn) {
+            this.$store.dispatch("addByIsbn", isbn)
+        },
+        setForm() {
+            if(this.$store.state.information.volumeInfo){
+                this.form.title = this.$store.state.information.volumeInfo.title
+                this.form.description = this.$store.state.information.volumeInfo.description
+                this.form.url = this.$store.state.information.volumeInfo.infoLink
+                this.form.isbn = this.$store.state.information.volumeInfo.industryIdentifiers[1].identifier
+                this.form.author = this.$store.state.information.volumeInfo.authors
+                this.form.published_at = this.$store.state.information.volumeInfo.publishedDate
+                this.form.img = this.$store.state.information.volumeInfo.infoLink
+            }
         }
     }
 }
